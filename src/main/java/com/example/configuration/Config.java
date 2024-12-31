@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @ConfigurationProperties("reader")
-public class RedisExten {
+public class Config {
     private long ttl;
+    private long expiryTime;
 }

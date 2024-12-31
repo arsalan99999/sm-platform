@@ -42,6 +42,4 @@ public class CommentService {
         // Save the comment
         return commentRepository.save(comment);
     }
-
-
 }

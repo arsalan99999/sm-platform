@@ -16,7 +16,7 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Autowired
-    RedisExten redisExten;
+    Config redisExten;
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
