@@ -25,23 +25,19 @@ public class LikeService {
     @Autowired
     private LikeRepository likeRepository;
 
-
-
     public Like likePost(Long postId, Long userId) {
-        // Fetch the post
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("Post with ID " + postId + " not found"));
 
-        // Fetch the authenticated user
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User with ID " + userId + " not found"));
 
-        // Check if the user has already liked the post
         boolean alreadyLiked = likeRepository.existsByUserAndPost(user, post);
         if (alreadyLiked) {
             throw new IllegalArgumentException("You have already liked this post");
         }
-        // Create and save a new Like
+
         Like like = new Like();
         like.setPost(post);
         like.setUser(user);

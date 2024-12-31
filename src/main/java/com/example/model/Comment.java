@@ -3,6 +3,7 @@ package com.example.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Comment implements Serializable {
+@ToString
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,16 +31,6 @@ public class Comment implements Serializable {
 
     private LocalDateTime timestamp;
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", user=" + (user != null ? "User{username='" + user.getUsername() + "'}" : "null") +
-                ", post=" + (post != null ? "Post{content='" + post.getContent() + "'}" : "null") +
-                ", content='" + content + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
-    }
     // Getters and Setters
 }
 

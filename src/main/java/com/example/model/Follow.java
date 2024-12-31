@@ -3,13 +3,15 @@ package com.example.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
 @Entity
 @Setter
 @Getter
-public class Follow implements Serializable {
+@ToString
+public class Follow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +25,5 @@ public class Follow implements Serializable {
     @JoinColumn(nullable = false)
     private User following;
 
-    @Override
-    public String toString() {
-        return "Follow{" +
-                "id=" + id +
-                ", follower=" + (follower != null ? "User{username='" + follower.getUsername() + "'}" : "null") +
-                ", following=" + (following != null ? "User{username='" + following.getUsername() + "'}" : "null") +
-                '}';
-    }
-    // Getters and Setters
 }
 

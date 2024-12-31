@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Table(name = "likes")
 @Getter
 @Setter
-public class Like implements Serializable {
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

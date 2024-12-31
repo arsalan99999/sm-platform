@@ -39,10 +39,10 @@ public class Controller {
     private FollowService followService;
 
     @PostMapping("/users/register")
-    public Response signUp(@RequestBody UserDto userDto) {
+    public Response signUp(@RequestBody RegisterDto registerDto) {
         try {
-            User savedUser = userService.addUser(userDto);
-            return new Response(true, "User registered successfully", "200", savedUser.toString());
+            User savedUser = userService.addUser(registerDto);
+            return new Response(true, "User registered successfully", "200", savedUser);
         } catch (Exception e) {
             return new Response(false, "Error while registering user", "500", e.getMessage());
         }
@@ -62,7 +62,8 @@ public class Controller {
     public Response getUserById(@PathVariable Long id) {
         try {
             User user = userService.findUserById(id);
-            return new Response(true, "User retrieved successfully", "200",user.toString());
+            return new Response(true, "User retrieved successfully", "200",user);
+
         }  catch (NoSuchElementException e) {
             return new Response(false, e.getMessage(), "404", null);
         } catch (Exception e) {
@@ -75,7 +76,7 @@ public class Controller {
         try {
             Long authenticatedUserId = (Long) request.getAttribute("authenticatedUserId");
             Post createdPost = postService.createPost(postDto, authenticatedUserId);
-            return new Response(true, "Post created successfully", "200", createdPost.toString());
+            return new Response(true, "Post created successfully", "200", createdPost);
         } catch (IllegalArgumentException e) {
             return new Response(false, e.getMessage(), "400", null);
         } catch (AccessDeniedException e){
@@ -106,7 +107,7 @@ public class Controller {
         try {
             Post post = postService.getPostById(id);
 
-            return new Response(true, "Post retrieved successfully", "200", post.toString());
+            return new Response(true, "Post retrieved successfully", "200", post);
         } catch (NoSuchElementException e) {
             return new Response(false, e.getMessage(), "404", null);
         } catch (Exception e) {
@@ -125,7 +126,7 @@ public class Controller {
             }
             Post updatedPost = postService.updatePost(existingPost, updatedPostDto);
 
-            return new Response(true, "Post updated successfully", "200", updatedPost.toString());
+            return new Response(true, "Post updated successfully", "200", updatedPost);
 
         } catch (AccessDeniedException e) {
             return new Response(false, e.getMessage(), "403",null);
@@ -165,7 +166,7 @@ public class Controller {
 
             Comment createdComment = commentService.addCommentToPost(id, commentDto, authenticatedUserId);
 
-            return new Response(true, "Comment added successfully", "200", createdComment.toString());
+            return new Response(true, "Comment added successfully", "200", createdComment);
         } catch (NoSuchElementException e) {
             return new Response(false, e.getMessage(), "404", null);
         } catch (IllegalArgumentException e) {
@@ -180,7 +181,7 @@ public class Controller {
             Long authenticatedUserId = (Long) request.getAttribute("authenticatedUserId");
             Like like = likeService.likePost(id, authenticatedUserId);
 
-            return new Response(true, "Post liked successfully", "200", like.toString());
+            return new Response(true, "Post liked successfully", "200", like);
         } catch (NoSuchElementException e) {
             return new Response(false, e.getMessage(), "404", null);
         } catch (IllegalArgumentException e) {
@@ -232,7 +233,6 @@ public class Controller {
             return new Response(false, "Failed to retrieve following users", "500", e.getMessage());
         }
     }
-
 
     @PostMapping("/posts/search")
     public Response searchPosts(@RequestBody SearchRequestDto searchRequest,

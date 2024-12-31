@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.dto.UserDto;
+import com.example.dto.RegisterDto;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User addUser(UserDto userDto) {
+    public User addUser(RegisterDto userDto) {
 
         User user = new User();
         user.setUsername(userDto.getUsername());
@@ -41,7 +41,6 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: "+ id));
     }
-
     @Cacheable(value = "userSearchCache", key = "#keyword + '-' + #page + '-' + #size")
     public Map<String, Object> searchUsers(String keyword, int page, int size) {
         // Fetch users from the repository

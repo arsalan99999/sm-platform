@@ -46,13 +46,10 @@ public class PostService {
 
     @Cacheable(value = "posts", key = "#page + '-' + #size + '-' + #sortBy")
     public Map<String, Object> getFormattedPosts(int page, int size, String sortBy) {
-        // Create a pageable object
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
 
-        // Fetch posts from the repository
         Page<Post> posts = postRepository.findAll(pageable);
 
-        // Format the posts data
         List<Map<String, Object>> formattedPosts = posts.getContent().stream()
                 .map(post -> {
                     Map<String, Object> map = new HashMap<>();
@@ -64,7 +61,6 @@ public class PostService {
                 })
                 .collect(Collectors.toList());
 
-        // Prepare the response data
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("totalElements", posts.getTotalElements());
         responseData.put("totalPages", posts.getTotalPages());
@@ -75,15 +71,13 @@ public class PostService {
     }
 
     public Post getPostById(Long id) {
-        // Fetch the post from the database
         return postRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post not found with ID: " + id));
     }
 
     public Post updatePost(Post existingPost, PostDto updatedPostDto) {
-        // Update the post fields
         existingPost.setContent(updatedPostDto.getContent());
-        existingPost.setTimestamp(LocalDateTime.now()); // Update the timestamp or leave it as is
+        existingPost.setTimestamp(LocalDateTime.now());
 
         return postRepository.save(existingPost);
     }
@@ -110,7 +104,6 @@ public class PostService {
                 })
                 .collect(Collectors.toList());
 
-        // Prepare and return the response data
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("totalElements", posts.getTotalElements());
         responseData.put("totalPages", posts.getTotalPages());

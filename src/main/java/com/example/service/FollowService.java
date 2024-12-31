@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.dto.UserDto;
 import com.example.model.Follow;
 import com.example.model.User;
 import com.example.repository.FollowRepository;

@@ -8,11 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class UserDto {
+public class RegisterDto {
     private String username;
     private String email;
     private String password;
     private String bio;
-    // Getters and Setters
 }
 
