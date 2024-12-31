@@ -27,7 +27,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User addUser(RegisterDto userDto) {
+    public User addUser(RegisterDto userDto) throws Exception {
+
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            throw new Exception("Username already exists");
+        }
+        // Check if the email already exists
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new Exception("Email already exists");
+        }
 
         User user = new User();
         user.setUsername(userDto.getUsername());

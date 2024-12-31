@@ -8,7 +8,9 @@ import com.example.model.Post;
 import com.example.model.User;
 import com.example.service.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -39,11 +41,21 @@ public class Controller {
     private FollowService followService;
 
     @PostMapping("/users/register")
-    public Response signUp(@RequestBody RegisterDto registerDto) {
+    public Response signUp(@RequestBody @Valid RegisterDto registerDto, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()){
+            String errorMessage = bindingResult.getFieldError() != null
+                    ? bindingResult.getFieldError().getDefaultMessage()
+                    : "Validation failed";
+            return new Response(false, errorMessage, "400", null);
+        }
         try {
             User savedUser = userService.addUser(registerDto);
             return new Response(true, "User registered successfully", "200", savedUser);
         } catch (Exception e) {
+            if (e.getMessage().contains("already exists")) {
+                return new Response(false, e.getMessage(), "409", null);
+            }
             return new Response(false, "Error while registering user", "500", e.getMessage());
         }
     }
