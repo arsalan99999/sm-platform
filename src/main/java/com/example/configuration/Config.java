@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
     private long ttl;
     private long expiryTime;
+    private String filePath;
 }

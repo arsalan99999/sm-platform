@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.configuration.Config;
 import com.example.dto.RegisterDto;
 import com.example.model.User;
 import com.example.repository.UserRepository;
@@ -11,11 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.io.File;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +27,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private Config config;
     public User addUser(RegisterDto userDto) throws Exception {
 
         if (userRepository.existsByUsername(userDto.getUsername())) {
@@ -75,6 +77,31 @@ public class UserService {
         responseData.put("users", formattedUsers);
 
         return responseData;
+    }
+
+    public String uploadProfilePicture(Long userId, MultipartFile file) throws Exception{
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found with id: "+ userId));
+
+        // Validate file
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty.");
+        }
+
+        File uploadDir = new File(config.getFilePath());
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        File destinationFile = new File(uploadDir, fileName);
+
+        file.transferTo(destinationFile);
+
+        user.setPicture(config.getFilePath() + fileName); // Assuming 'bio' is temporarily used for file path
+        userRepository.save(user);
+
+        return config.getFilePath() + fileName;
     }
 }
 

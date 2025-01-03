@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "user")
 @Getter
 @Setter
-//@ToString(exclude = {"password"})
 @ToString
 public class User implements Serializable{
 
@@ -33,6 +32,9 @@ public class User implements Serializable{
     private String password;
 
     private String bio;
+
+    @JsonIgnore
+    private String picture;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore

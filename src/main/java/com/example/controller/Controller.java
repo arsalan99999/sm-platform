@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -269,6 +270,18 @@ public class Controller {
             return new Response(true, "Users retrieved successfully", "200", responseData);
         } catch (Exception e) {
             return new Response(false, "Failed to retrieve users", "500", e.getMessage());
+        }
+    }
+
+    @PostMapping("/users/{id}/upload")
+    public Response uploadProfilePicture(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            String filePath = userService.uploadProfilePicture(id, file);
+            return new Response( true, "Picture uploaded successfully.", "200","Path: " + filePath);
+        } catch (Exception e) {
+            return new Response(false,"Failed to upload picture:", e.getMessage(), null);
         }
     }
 
