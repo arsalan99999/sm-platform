@@ -10,4 +10,6 @@ import lombok.*;
 @ToString
 public class CommentDto {
     private String content;
+
+    
 }
